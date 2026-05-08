@@ -8,10 +8,10 @@ const MAX_SEARCH_LENGTH = 100
 
 interface HeaderProps {
   activeCategory?: string
-  onCategoryChange: (category: string) => void
+  onCategoryChange?: (category: string) => void
 }
 
-export default function Header({ activeCategory = 'All', onCategoryChange }: HeaderProps) {
+export default function Header({ activeCategory = 'All', onCategoryChange = () => {} }: HeaderProps) {
   const [query, setQuery] = useState('')
   const router = useRouter()
 
@@ -24,9 +24,17 @@ export default function Header({ activeCategory = 'All', onCategoryChange }: Hea
 
   return (
     <header className="site-header">
+
       <div className="header-inner">
-        <Link href="/" className="header-logo">
-          <img src="/logo.svg" alt="AgentBazar" style={{ filter: 'brightness(0) invert(1)' }} />
+        <Link href="/" className="header-logo" style={{ display: 'flex', alignItems: 'center' }}>
+          <img 
+            src="/new-logo.jpg" 
+            alt="AgentBazar" 
+            style={{ 
+              height: '44px',
+              width: 'auto'
+            }} 
+          />
         </Link>
         <form className="header-search" onSubmit={handleSearch}>
           <input
@@ -42,15 +50,6 @@ export default function Header({ activeCategory = 'All', onCategoryChange }: Hea
             </svg>
           </button>
         </form>
-      </div>
-      <div className="cat-strip">
-        <div className="cat-strip-inner">
-          {CATEGORIES.map(cat => (
-            <button key={cat} className={`cat-strip-btn${activeCategory === cat ? ' active' : ''}`} onClick={() => onCategoryChange(cat)}>
-              {cat}
-            </button>
-          ))}
-        </div>
       </div>
     </header>
   )

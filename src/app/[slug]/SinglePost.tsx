@@ -38,10 +38,14 @@ export default function SinglePost({ slug }: { slug: string }) {
   const [copied, setCopied] = useState(false)
   const [processedContent, setProcessedContent] = useState('')
 
+  const [recentPosts, setRecentPosts] = useState<Post[]>([])
+
   useEffect(() => {
     if (!slug) return
     setLoading(true)
     setError(null)
+    
+    // Fetch current post
     supabase
       .from('blog_posts')
       .select('*')
@@ -59,10 +63,44 @@ export default function SinglePost({ slug }: { slug: string }) {
           return
         }
         setPost(data as Post)
-        const withIds = injectHeadingIds(data.content || '')
-        setProcessedContent(DOMPurify.sanitize(withIds))
-        setToc(buildToc(data.content || ''))
+        const rawContent = data.content || ''
+        const withIds = injectHeadingIds(rawContent)
+        // Remove empty <li> tags from DB content
+        const cleaned = withIds.replace(/<li>\s*<\/li>/gi, '')
+        const sanitized = DOMPurify.sanitize(cleaned, {
+          ALLOWED_TAGS: [
+            'p', 'br', 'b', 'i', 'em', 'strong', 'u', 's', 'del', 'ins',
+            'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+            'ul', 'ol', 'li', 'dl', 'dt', 'dd',
+            'blockquote', 'pre', 'code',
+            'a', 'img',
+            'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td', 'caption', 'colgroup', 'col',
+            'div', 'span', 'section', 'article', 'aside', 'header', 'footer', 'main',
+            'figure', 'figcaption', 'hr', 'sup', 'sub', 'mark',
+          ],
+          ALLOWED_ATTR: [
+            'href', 'src', 'alt', 'title', 'class', 'id',
+            'target', 'rel', 'width', 'height',
+            'colspan', 'rowspan', 'scope', 'headers',
+            'style',
+          ],
+          ALLOW_DATA_ATTR: false,
+        })
+        setProcessedContent(sanitized)
+        // Build TOC from the ID-injected content so anchor IDs match
+        setToc(buildToc(withIds))
         setLoading(false)
+      })
+
+    // Fetch recent posts
+    supabase
+      .from('blog_posts')
+      .select('title, slug, published_date, cover_image, category')
+      .order('published_date', { ascending: false })
+      .neq('slug', slug)
+      .limit(3)
+      .then(({ data }) => {
+        if (data) setRecentPosts(data as Post[])
       })
   }, [slug])
 
@@ -193,21 +231,42 @@ export default function SinglePost({ slug }: { slug: string }) {
           </div>
         </article>
 
-        <aside className="single-sidebar">
-          {toc.length > 0 && (
-            <div className="toc-box">
-              <div className="toc-title">Table of Contents</div>
-              <ul className="toc-list">
-                {toc.map(item => (
-                  <li key={item.id} style={{ paddingLeft: item.level === 3 ? 12 : 0 }}>
-                    <a href={`#${item.id}`}>{item.text}</a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+        <aside className="single-sidebar" style={{ display: 'flex', flexDirection: 'column', gap: '24px', height: '100%' }}>
+          <div>
+            {toc.length > 0 && (
+              <div className="toc-box" style={{ position: 'static', marginBottom: '24px' }}>
+                <div className="toc-title">Table of Contents</div>
+                <ul className="toc-list">
+                  {toc.map(item => (
+                    <li key={item.id} style={{ paddingLeft: item.level === 3 ? 12 : 0 }}>
+                      <a href={`#${item.id}`}>{item.text}</a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
-          <div className="share-box">
+            {recentPosts.length > 0 && (
+              <div style={{ background: '#f4f6f9', borderRadius: 16, padding: 24, border: '1.5px solid #e8ecf2' }}>
+                <div style={{ fontFamily: 'sans-serif', fontSize: 14, fontWeight: 700, textTransform: 'uppercase', marginBottom: 16, letterSpacing: '0.06em', color: '#0f1923' }}>Recent Articles</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                  {recentPosts.map(rp => (
+                    <Link key={rp.slug} href={`/${rp.slug}`} style={{ textDecoration: 'none', color: 'inherit', display: 'flex', gap: 12, alignItems: 'center' }}>
+                      {rp.cover_image && (
+                        <img src={rp.cover_image} alt={rp.title} style={{ width: 64, height: 64, borderRadius: 8, objectFit: 'cover' }} />
+                      )}
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: 11, color: '#1A4FA0', fontWeight: 700, textTransform: 'uppercase', marginBottom: 4 }}>{rp.category}</div>
+                        <div style={{ fontSize: 13.5, fontWeight: 700, lineHeight: 1.3, color: '#0f1923', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{rp.title}</div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="share-box" style={{ position: 'sticky', bottom: '24px', marginTop: 'auto' }}>
             <div className="share-title">Share Article</div>
             <button className="share-btn copy" onClick={handleCopy}>
               <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

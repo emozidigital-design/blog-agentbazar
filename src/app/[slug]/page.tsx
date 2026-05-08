@@ -3,14 +3,15 @@ import { supabase } from '@/lib/supabase'
 import SinglePost from './SinglePost'
 
 interface Props {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params
   const { data: post } = await supabase
     .from('blog_posts')
     .select('title, excerpt, cover_image, seo_title, seo_description, og_title, og_description, canonical_url, slug')
-    .eq('slug', params.slug)
+    .eq('slug', slug)
     .single()
 
   if (!post) return { title: 'Post Not Found | AgentBazar Blog' }
@@ -30,6 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default function Page({ params }: Props) {
-  return <SinglePost slug={params.slug} />
+export default async function Page({ params }: Props) {
+  const { slug } = await params
+  return <SinglePost slug={slug} />
 }
