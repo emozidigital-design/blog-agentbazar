@@ -125,18 +125,6 @@ function BlogContent() {
             </div>
           )}
 
-          {/* ONLY ONE FILTER PILL ROW - NO DUPLICATES */}
-          <div className="filter-pills">
-            {CATEGORIES.map(cat => (
-              <button
-                key={cat}
-                className={`pill${activeCategory === cat ? ' active' : ''}`}
-                onClick={() => handleCategoryChange(cat)}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
         </div>
 
         <div className="page-wrap">

@@ -31,7 +31,7 @@ export default function Header({ activeCategory = 'All', onCategoryChange = () =
             src="/new-logo.jpg" 
             alt="AgentBazar" 
             style={{ 
-              height: '44px',
+              height: '60px',
               width: 'auto'
             }} 
           />
@@ -50,6 +50,15 @@ export default function Header({ activeCategory = 'All', onCategoryChange = () =
             </svg>
           </button>
         </form>
+      </div>
+      <div className="cat-strip">
+        <div className="cat-strip-inner">
+          {CATEGORIES.map(cat => (
+            <button key={cat} className={`cat-strip-btn${activeCategory === cat ? ' active' : ''}`} onClick={() => onCategoryChange(cat)}>
+              {cat}
+            </button>
+          ))}
+        </div>
       </div>
     </header>
   )
