@@ -270,6 +270,25 @@ export default function SinglePost({ slug }: { slug: string }) {
         </article>
 
         <aside className="single-sidebar" style={{ display: 'flex', flexDirection: 'column', gap: '24px', height: '100%' }}>
+          {recentPosts.length > 0 && (
+            <div style={{ background: '#f4f6f9', borderRadius: 16, padding: 24, border: '1.5px solid #e8ecf2' }}>
+              <div style={{ fontFamily: 'sans-serif', fontSize: 14, fontWeight: 700, textTransform: 'uppercase', marginBottom: 16, letterSpacing: '0.06em', color: '#0f1923' }}>Recent Articles</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                {recentPosts.map(rp => (
+                  <Link key={rp.slug} href={`/${rp.slug}`} style={{ textDecoration: 'none', color: 'inherit', display: 'flex', gap: 12, alignItems: 'center' }}>
+                    {rp.cover_image && (
+                      <img src={rp.cover_image} alt={rp.title} style={{ width: 64, height: 64, borderRadius: 8, objectFit: 'cover' }} />
+                    )}
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: 11, color: '#1A4FA0', fontWeight: 700, textTransform: 'uppercase', marginBottom: 4 }}>{rp.category}</div>
+                      <div style={{ fontSize: 13.5, fontWeight: 700, lineHeight: 1.3, color: '#0f1923', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{rp.title}</div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* About the Blog Block */}
           <div className="sidebar-card">
             <img src="/new-logo.jpg" alt="AgentBazar" className="about-logo" />
@@ -285,39 +304,18 @@ export default function SinglePost({ slug }: { slug: string }) {
             </Link>
           </div>
 
-          <div>
-            {toc.length > 0 && (
-              <div className="toc-box" style={{ position: 'static', marginBottom: '24px' }}>
-                <div className="toc-title">Table of Contents</div>
-                <ul className="toc-list">
-                  {toc.map(item => (
-                    <li key={item.id} style={{ paddingLeft: item.level === 3 ? 12 : 0 }}>
-                      <a href={`#${item.id}`}>{item.text}</a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {recentPosts.length > 0 && (
-              <div style={{ background: '#f4f6f9', borderRadius: 16, padding: 24, border: '1.5px solid #e8ecf2' }}>
-                <div style={{ fontFamily: 'sans-serif', fontSize: 14, fontWeight: 700, textTransform: 'uppercase', marginBottom: 16, letterSpacing: '0.06em', color: '#0f1923' }}>Recent Articles</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                  {recentPosts.map(rp => (
-                    <Link key={rp.slug} href={`/${rp.slug}`} style={{ textDecoration: 'none', color: 'inherit', display: 'flex', gap: 12, alignItems: 'center' }}>
-                      {rp.cover_image && (
-                        <img src={rp.cover_image} alt={rp.title} style={{ width: 64, height: 64, borderRadius: 8, objectFit: 'cover' }} />
-                      )}
-                      <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: 11, color: '#1A4FA0', fontWeight: 700, textTransform: 'uppercase', marginBottom: 4 }}>{rp.category}</div>
-                        <div style={{ fontSize: 13.5, fontWeight: 700, lineHeight: 1.3, color: '#0f1923', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{rp.title}</div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
+          {toc.length > 0 && (
+            <div className="toc-box" style={{ position: 'static' }}>
+              <div className="toc-title">Table of Contents</div>
+              <ul className="toc-list">
+                {toc.map(item => (
+                  <li key={item.id} style={{ paddingLeft: item.level === 3 ? 12 : 0 }}>
+                    <a href={`#${item.id}`}>{item.text}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           <div className="share-box" style={{ position: 'sticky', bottom: '24px', marginTop: 'auto' }}>
             <div className="share-title">Share Article</div>
