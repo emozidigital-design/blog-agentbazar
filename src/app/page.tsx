@@ -19,11 +19,13 @@ function BlogContent() {
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [activeCategory, setActiveCategory] = useState(urlCat)
   const [searchQuery, setSearchQuery] = useState(urlSearch)
 
   const fetchPosts = useCallback(async (cat: string, search: string, pg: number) => {
     setLoading(true)
+    setError(null)
     try {
       let query = supabase
         .from('blog_posts')
@@ -43,6 +45,7 @@ function BlogContent() {
       setTotal(count || 0)
     } catch (err) {
       console.error(err)
+      setError('Failed to load posts. Please try again.')
       setPosts([])
       setTotal(0)
     } finally {
@@ -139,6 +142,16 @@ function BlogContent() {
         <div className="page-wrap">
           {loading ? (
             <SkeletonLoader />
+          ) : error ? (
+            <div style={{ textAlign: 'center', padding: '80px 0', color: '#6b7a8d' }}>
+              <p style={{ fontSize: '1.1rem' }}>{error}</p>
+              <button
+                onClick={() => fetchPosts(activeCategory, searchQuery, page)}
+                style={{ marginTop: 16, color: '#1A4FA0', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 14 }}
+              >
+                Try again
+              </button>
+            </div>
           ) : posts.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '80px 0', color: '#6b7a8d' }}>
               <p style={{ fontSize: '1.1rem' }}>No posts found.</p>

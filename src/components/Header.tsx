@@ -4,13 +4,22 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { CATEGORIES } from '@/lib/supabase'
 
-export default function Header({ activeCategory = 'All', onCategoryChange }: any) {
+const MAX_SEARCH_LENGTH = 100
+
+interface HeaderProps {
+  activeCategory?: string
+  onCategoryChange: (category: string) => void
+}
+
+export default function Header({ activeCategory = 'All', onCategoryChange }: HeaderProps) {
   const [query, setQuery] = useState('')
   const router = useRouter()
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
-    if (query.trim()) router.push(`/?search=${encodeURIComponent(query.trim())}`)
+    const trimmed = query.trim()
+    if (!trimmed || trimmed.length > MAX_SEARCH_LENGTH) return
+    router.push(`/?search=${encodeURIComponent(trimmed)}`)
   }
 
   return (
@@ -20,7 +29,13 @@ export default function Header({ activeCategory = 'All', onCategoryChange }: any
           <img src="/logo.svg" alt="AgentBazar" style={{ filter: 'brightness(0) invert(1)' }} />
         </Link>
         <form className="header-search" onSubmit={handleSearch}>
-          <input type="text" placeholder="Search..." value={query} onChange={e => setQuery(e.target.value)} />
+          <input
+            type="text"
+            placeholder="Search..."
+            value={query}
+            maxLength={MAX_SEARCH_LENGTH}
+            onChange={e => setQuery(e.target.value)}
+          />
           <button type="submit" aria-label="Search">
             <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
               <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
