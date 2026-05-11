@@ -1,9 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
 
-const POPUP_KEY = 'b2b_popup_dismissed'
-const DISMISS_DAYS = 7 // show again after 7 days
-
 export default function EntryPopup() {
   const [visible, setVisible] = useState(false)
   const [closing, setClosing] = useState(false)
@@ -12,13 +9,7 @@ export default function EntryPopup() {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    const raw = localStorage.getItem(POPUP_KEY)
-    if (raw) {
-      const ts = Number(raw)
-      const daysElapsed = (Date.now() - ts) / (1000 * 60 * 60 * 24)
-      if (daysElapsed < DISMISS_DAYS) return
-    }
-    // Slight delay so page content renders first
+    // Show on every page load after a short delay
     const t = setTimeout(() => setVisible(true), 900)
     return () => clearTimeout(t)
   }, [])
@@ -28,7 +19,6 @@ export default function EntryPopup() {
     setTimeout(() => {
       setVisible(false)
       setClosing(false)
-      localStorage.setItem(POPUP_KEY, String(Date.now()))
     }, 400)
   }
 
