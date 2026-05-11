@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh pr *)",
+      "Bash(gh repo *)",
+      "Bash(Get-ChildItem -Path \"C:\\\\agent bazar\\\\Blog\\\\repo-review\" -Recurse -Force)",
+      "Bash(Select-Object -First 50)",
+      "Bash(Format-Table FullName, PSIsContainer)",
+      "PowerShell(Get-ChildItem \"c:\\\\agent bazar\\\\Blog\\\\repo-review\" -Force | ForEach-Object { Move-Item -Path $_.FullName -Destination \"c:\\\\agent bazar\\\\Blog\\\\$\\($_.Name\\)\" -Force }; Remove-Item \"c:\\\\agent bazar\\\\Blog\\\\repo-review\" -Recurse -Force -ErrorAction SilentlyContinue; Write-Output \"Done\")",
+      "Bash(git add *)",
+      "Bash(git config *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)"
+    ]
+  }
+}

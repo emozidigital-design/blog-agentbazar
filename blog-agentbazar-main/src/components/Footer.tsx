@@ -6,7 +6,7 @@ export default function Footer() {
     <footer className="site-footer">
       <div className="footer-inner">
         <div className="footer-brand">
-          <img src="/b2b-logo.jpg" alt="AgentBazar" style={{ height: 36, width: 'auto', objectFit: 'contain' }} />
+          <img src="/logo.svg" alt="AgentBazar" style={{ filter: 'brightness(0) invert(1)' }} />
           <p>India's leading B2B travel platform. Stay updated with aviation news, visa updates, and expert insights.</p>
         </div>
         <div className="footer-col">
