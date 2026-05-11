@@ -956,6 +956,12 @@ h1, h2, h3, h4, h5, h6 {
   border-color: #F47920;
   box-shadow: 0 4px 12px rgba(244, 121, 32, 0.3);
 }
+.article-share-inline .share-logo.green:hover {
+  background: #25D366;
+  color: #fff;
+  border-color: #25D366;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+}
 
 /* WHATSAPP CONTACT FAB */
 .whatsapp-contact-fab {
