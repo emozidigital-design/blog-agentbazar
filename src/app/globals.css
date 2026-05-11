@@ -96,17 +96,21 @@ h1, h2, h3, h4, h5, h6 {
   border: none;
   color: rgba(255,255,255,0.85);
   font-family: 'DM Sans', sans-serif;
-  font-size: 15px; 
-  font-weight: 600; 
-  padding: 14px 16px;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 5px 12px;
   cursor: pointer;
   white-space: nowrap;
-  transition: transform 0.2s ease, color 0.2s ease; 
+  border-radius: 8px;
+  transition: background 0.25s ease, transform 0.25s ease, color 0.2s ease, box-shadow 0.25s ease;
   border-bottom: 2px solid transparent;
 }
-.cat-strip-btn:hover { 
-  color: #fff; 
-  transform: translateY(-3px); /* Clean pop-up effect without scaling */
+.cat-strip-btn:hover {
+  color: #fff;
+  background: #002F78; /* ~10% lighter than #001D4A */
+  border-radius: 8px;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 .cat-strip-btn.active {
   color: #fff;
