@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import DOMPurify from 'isomorphic-dompurify'
 import { supabase, Post, formatDate, readTime } from '@/lib/supabase'
 import Header from '@/components/Header'
@@ -31,6 +32,7 @@ function injectHeadingIds(html: string): string {
 }
 
 export default function SinglePost({ slug }: { slug: string }) {
+  const router = useRouter()
   const [post, setPost] = useState<Post | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -120,10 +122,16 @@ export default function SinglePost({ slug }: { slug: string }) {
     if (parent) parent.style.display = 'none'
   }
 
+  const handleCategoryChange = (cat: string) => {
+    const params = new URLSearchParams()
+    if (cat !== 'All') params.set('category', cat)
+    router.push(`/?${params.toString()}`)
+  }
+
   if (loading) {
     return (
       <>
-        <Header />
+        <Header activeCategory="All" onCategoryChange={handleCategoryChange} />
         <div className="single-layout">
           <div>
             <div className="skeleton" style={{ height: 56, marginBottom: 24, borderRadius: 12 }} />
@@ -144,7 +152,7 @@ export default function SinglePost({ slug }: { slug: string }) {
   if (error || !post) {
     return (
       <>
-        <Header />
+        <Header activeCategory="All" onCategoryChange={handleCategoryChange} />
         <div style={{ padding: '80px 24px', textAlign: 'center' }}>
           <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: '2rem', marginBottom: 16 }}>
             {error || 'Post not found'}
@@ -161,7 +169,7 @@ export default function SinglePost({ slug }: { slug: string }) {
 
   return (
     <>
-      <Header />
+      <Header activeCategory={post.category || 'All'} onCategoryChange={handleCategoryChange} />
 
       <div className="single-layout">
         <article className="single-main">
