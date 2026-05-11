@@ -77,10 +77,10 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ── CATEGORY STRIP – BLUE BAR BELOW HEADER ── */
 .cat-strip {
-  background: #1A4FA0;
+  background: #001D4A;
   overflow-x: auto;
   scrollbar-width: none;
-  padding: 8px 0; /* Increased padding for a slightly bigger bar */
+  padding: 4px 0;
 }
 .cat-strip::-webkit-scrollbar { display: none; }
 .cat-strip-inner {
@@ -89,32 +89,29 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0 24px;
   display: flex;
   align-items: center;
-  gap: 12px; /* Add some gap to allow for the pop-up scaling effect */
+  gap: 8px; 
 }
 .cat-strip-btn {
   background: none;
   border: none;
   color: rgba(255,255,255,0.85);
-  font-family: 'Syne', sans-serif; /* Matched to a more stylish, logo-like font */
-  font-size: 16px; /* Increased font size */
-  font-weight: 600; /* Bolder font weight */
-  padding: 10px 18px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px; 
+  font-weight: 600; 
+  padding: 14px 16px;
   cursor: pointer;
   white-space: nowrap;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Smooth pop-up animation */
+  transition: transform 0.2s ease, color 0.2s ease; 
   border-bottom: 2px solid transparent;
-  border-radius: 8px; /* Added slight rounding for a modern feel */
 }
 .cat-strip-btn:hover { 
   color: #fff; 
-  transform: scale(1.15) translateY(-2px); /* Pop-up effect on hover */
-  background: rgba(255,255,255,0.1); /* Slight background highlight on hover */
+  transform: translateY(-3px); /* Clean pop-up effect without scaling */
 }
 .cat-strip-btn.active {
   color: #fff;
   border-bottom-color: #F47920;
   font-weight: 700;
-  transform: scale(1.05); /* Active state is slightly larger too */
 }
 
 /* ── PAGE WRAP ── */
