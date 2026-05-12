@@ -583,16 +583,12 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 16px;
   overflow: hidden;
   margin-bottom: 32px;
-  max-height: 520px;
 }
 .post-cover img {
   width: 100%;
   height: auto;
-  max-height: 520px;
-  object-fit: contain;
-  object-position: center top;
-  background: #f4f6f9;
   display: block;
+  background: #f4f6f9;
 }
 .post-header { margin-bottom: 32px; }
 .post-header-cat {
