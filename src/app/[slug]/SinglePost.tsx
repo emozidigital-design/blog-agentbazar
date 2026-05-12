@@ -53,6 +53,7 @@ export default function SinglePost({ slug }: { slug: string }) {
       .from('blog_posts')
       .select('*')
       .eq('slug', slug)
+      .is('client_id', null)
       .single()
       .then(({ data, error: fetchError }) => {
         if (fetchError) {
@@ -102,6 +103,8 @@ export default function SinglePost({ slug }: { slug: string }) {
     supabase
       .from('blog_posts')
       .select('title, slug, published_date, cover_image, category')
+      .eq('status', 'published')
+      .is('client_id', null)
       .order('published_date', { ascending: false })
       .neq('slug', slug)
       .limit(3)

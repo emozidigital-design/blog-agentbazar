@@ -32,6 +32,7 @@ function BlogContent() {
         .from('blog_posts')
         .select('*', { count: 'exact' })
         .eq('status', 'published')
+        .is('client_id', null)
         .order('published_date', { ascending: false })
 
       if (cat && cat !== 'All') query = query.ilike('category', `%${cat}%`)
