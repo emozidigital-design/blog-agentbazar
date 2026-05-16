@@ -41,11 +41,12 @@ export async function POST(req: NextRequest) {
     }
 
     // Dual-write to admin Supabase with client info
+    const AGENTBAZAR_CLIENT_ID = 'd5104fcd-defe-4e3d-a4cf-1893dba7b931'
     const { data: adminExisting } = await adminSupabase
       .from('lead_list')
       .select('id, submission_count')
       .eq('email', normalizedEmail)
-      .eq('client_id', 'agentbazar')
+      .eq('client_id', AGENTBAZAR_CLIENT_ID)
       .single()
 
     if (adminExisting) {
@@ -56,7 +57,7 @@ export async function POST(req: NextRequest) {
     } else {
       await adminSupabase
         .from('lead_list')
-        .insert({ name: normalizedName, email: normalizedEmail, client_id: 'agentbazar', client_name: 'AgentBazar Blog', source: 'agentbazar-blog' })
+        .insert({ name: normalizedName, email: normalizedEmail, client_id: AGENTBAZAR_CLIENT_ID, client_name: 'TRIPFORU HOLIDAYS PRIVATE LIMITED', source: 'agentbazar-blog' })
     }
 
     return NextResponse.json({ success: true })
