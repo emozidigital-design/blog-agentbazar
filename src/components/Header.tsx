@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { CATEGORIES } from '@/lib/supabase'
@@ -9,10 +9,12 @@ const MAX_SEARCH_LENGTH = 100
 interface HeaderProps {
   activeCategory?: string
   onCategoryChange?: (category: string) => void
+  initialQuery?: string
 }
 
-export default function Header({ activeCategory = 'All', onCategoryChange = () => {} }: HeaderProps) {
-  const [query, setQuery] = useState('')
+export default function Header({ activeCategory = 'All', onCategoryChange = () => {}, initialQuery = '' }: HeaderProps) {
+  const [query, setQuery] = useState(initialQuery)
+  useEffect(() => { setQuery(initialQuery) }, [initialQuery])
   const router = useRouter()
 
   const handleSearch = (e: React.FormEvent) => {

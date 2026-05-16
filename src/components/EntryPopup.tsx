@@ -1,6 +1,9 @@
 'use client'
 import { useState, useEffect } from 'react'
 
+const POPUP_SEEN_KEY = 'ab_popup_seen'
+const markPopupSeen = () => localStorage.setItem(POPUP_SEEN_KEY, '1')
+
 export default function EntryPopup() {
   const [visible, setVisible] = useState(false)
   const [closing, setClosing] = useState(false)
@@ -11,11 +14,14 @@ export default function EntryPopup() {
   const [error, setError] = useState('')
 
   useEffect(() => {
+    if (localStorage.getItem(POPUP_SEEN_KEY)) return
     const t = setTimeout(() => setVisible(true), 900)
     return () => clearTimeout(t)
   }, [])
 
   const dismiss = () => {
+    if (loading) return
+    markPopupSeen()
     setClosing(true)
     setTimeout(() => {
       setVisible(false)
@@ -36,6 +42,7 @@ export default function EntryPopup() {
       })
       const data = await res.json()
       if (!data.success) throw new Error(data.error || 'Something went wrong')
+      markPopupSeen()
       setSubmitted(true)
       setTimeout(dismiss, 2200)
     } catch (err: unknown) {
@@ -73,7 +80,7 @@ export default function EntryPopup() {
 
         <p className="popup-desc">
           Get visa updates, airline fare alerts, and expert strategies delivered
-          directly to your inbox — trusted by <strong>4,000+ travel professionals</strong>.
+          directly to your inbox — trusted by <strong>4,200+ travel professionals</strong>.
         </p>
 
         {!submitted ? (

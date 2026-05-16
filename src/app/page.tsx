@@ -30,7 +30,7 @@ function BlogContent() {
     try {
       let query = supabase
         .from('blog_posts')
-        .select('*', { count: 'exact' })
+        .select('id, slug, title, excerpt, cover_image, category, published_date, content', { count: 'exact' })
         .eq('status', 'published')
         .order('published_date', { ascending: false })
 
@@ -109,7 +109,7 @@ function BlogContent() {
   return (
     <>
       <EntryPopup />
-      <Header activeCategory={activeCategory} onCategoryChange={handleCategoryChange} />
+      <Header activeCategory={activeCategory} onCategoryChange={handleCategoryChange} initialQuery={urlSearch} />
 
       <main>
         <div className="page-wrap">
