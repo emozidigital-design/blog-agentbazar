@@ -4,12 +4,13 @@ import { useState, useEffect } from 'react'
 export default function EntryPopup() {
   const [visible, setVisible] = useState(false)
   const [closing, setClosing] = useState(false)
+  const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   useEffect(() => {
-    // Show on every page load after a short delay
     const t = setTimeout(() => setVisible(true), 900)
     return () => clearTimeout(t)
   }, [])
@@ -24,13 +25,24 @@ export default function EntryPopup() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!email.trim()) return
+    if (!fullName.trim() || !email.trim()) return
     setLoading(true)
-    // Simulate async (replace with real API call)
-    await new Promise(r => setTimeout(r, 1000))
-    setLoading(false)
-    setSubmitted(true)
-    setTimeout(dismiss, 2200)
+    setError('')
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: fullName, email }),
+      })
+      const data = await res.json()
+      if (!data.success) throw new Error(data.error || 'Something went wrong')
+      setSubmitted(true)
+      setTimeout(dismiss, 2200)
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   if (!visible) return null
@@ -66,6 +78,22 @@ export default function EntryPopup() {
 
         {!submitted ? (
           <form onSubmit={handleSubmit} className="popup-form" noValidate>
+            <div className="popup-input-wrap" style={{ marginBottom: '12px' }}>
+              <svg className="popup-input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="#6b7a8d" strokeWidth="1.8" strokeLinecap="round"/>
+                <circle cx="12" cy="7" r="4" stroke="#6b7a8d" strokeWidth="1.8"/>
+              </svg>
+              <input
+                type="text"
+                className="popup-input"
+                placeholder="Full name"
+                value={fullName}
+                onChange={e => setFullName(e.target.value)}
+                required
+                autoComplete="name"
+                id="popup-name"
+              />
+            </div>
             <div className="popup-input-wrap">
               <svg className="popup-input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none">
                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="#6b7a8d" strokeWidth="1.8" strokeLinecap="round"/>
@@ -82,7 +110,10 @@ export default function EntryPopup() {
                 id="popup-email"
               />
             </div>
-            <button type="submit" className="popup-cta" disabled={loading}>
+            {error && (
+              <p style={{ color: '#e53e3e', fontSize: '13px', margin: '8px 0 0', textAlign: 'center' }}>{error}</p>
+            )}
+            <button type="submit" className="popup-cta" disabled={loading} style={{ marginTop: '16px' }}>
               {loading ? (
                 <span className="popup-spinner" />
               ) : (
