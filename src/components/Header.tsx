@@ -14,7 +14,13 @@ interface HeaderProps {
 
 export default function Header({ activeCategory = 'All', onCategoryChange = () => {}, initialQuery = '' }: HeaderProps) {
   const [query, setQuery] = useState(initialQuery)
+  const [scrolled, setScrolled] = useState(false)
   useEffect(() => { setQuery(initialQuery) }, [initialQuery])
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
   const router = useRouter()
 
   const handleSearch = (e: React.FormEvent) => {
@@ -25,7 +31,7 @@ export default function Header({ activeCategory = 'All', onCategoryChange = () =
   }
 
   return (
-    <header className="site-header">
+    <header className={`site-header${scrolled ? ' scrolled' : ''}`}>
 
       <div className="header-inner">
         <Link href="/" className="header-logo" style={{ display: 'flex', alignItems: 'center' }}>

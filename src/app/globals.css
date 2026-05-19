@@ -24,6 +24,17 @@ h1, h2, h3, h4, h5, h6 {
   position: sticky;
   top: 0;
   z-index: 100;
+  transition: top 0.35s ease, margin 0.35s ease, border-radius 0.35s ease, box-shadow 0.35s ease, background 0.35s ease;
+}
+.site-header.scrolled {
+  top: 12px;
+  margin: 0 24px;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 29, 74, 0.18);
+  border-color: transparent;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(16px);
+  overflow: hidden;
 }
 
 .header-inner {
@@ -35,6 +46,14 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   justify-content: space-between;
   gap: 24px;
+  transition: height 0.35s ease;
+}
+.site-header.scrolled .header-inner {
+  max-width: 100%;
+  height: 68px;
+}
+.site-header.scrolled .cat-strip-inner {
+  max-width: 100%;
 }
 
 .header-logo img {
