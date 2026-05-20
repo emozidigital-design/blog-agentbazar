@@ -16,14 +16,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!post) return { title: 'Post Not Found | AgentBazar Blog' }
 
+  const ogImages = post.cover_image
+    ? [{ url: post.cover_image, width: 1200, height: 630, alt: post.title }]
+    : []
+
   return {
     title: post.seo_title || `${post.title} | AgentBazar Blog`,
     description: post.seo_description || post.excerpt,
     openGraph: {
       title: post.og_title || post.title,
       description: post.og_description || post.excerpt,
-      images: post.cover_image ? [{ url: post.cover_image }] : [],
+      images: ogImages,
       type: 'article',
+      siteName: 'AgentBazar Blog',
+      url: post.canonical_url || `https://blog.agentbazar.in/${post.slug}`,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.og_title || post.title,
+      description: post.og_description || post.excerpt,
+      images: post.cover_image ? [post.cover_image] : [],
     },
     alternates: {
       canonical: post.canonical_url || `https://blog.agentbazar.in/${post.slug}`,
