@@ -1,59 +1,59 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-const blogSupabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
-
-const adminSupabase = createClient(
-  process.env.ADMIN_SUPABASE_URL!,
-  process.env.ADMIN_SUPABASE_SERVICE_ROLE_KEY!
-)
-
 const AGENTBAZAR_CLIENT_ID = 'd5104fcd-defe-4e3d-a4cf-1893dba7b931'
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 
-async function upsertBlogLead(email: string, name: string) {
-  const { data } = await blogSupabase
-    .from('lead_list')
-    .select('id, submission_count')
-    .eq('email', email)
-    .single()
-
-  if (data) {
-    await blogSupabase
-      .from('lead_list')
-      .update({ submission_count: data.submission_count + 1, last_submitted_at: new Date().toISOString(), name })
-      .eq('id', data.id)
-  } else {
-    await blogSupabase
-      .from('lead_list')
-      .insert({ name, email, source: 'agentbazar-blog' })
-  }
-}
-
-async function upsertAdminLead(email: string, name: string) {
-  const { data } = await adminSupabase
-    .from('lead_list')
-    .select('id, submission_count')
-    .eq('email', email)
-    .eq('client_id', AGENTBAZAR_CLIENT_ID)
-    .single()
-
-  if (data) {
-    await adminSupabase
-      .from('lead_list')
-      .update({ submission_count: data.submission_count + 1, last_submitted_at: new Date().toISOString(), name })
-      .eq('id', data.id)
-  } else {
-    await adminSupabase
-      .from('lead_list')
-      .insert({ name, email, client_id: AGENTBAZAR_CLIENT_ID, client_name: 'TRIPFORU HOLIDAYS PRIVATE LIMITED', source: 'agentbazar-blog' })
-  }
-}
-
 export async function POST(req: NextRequest) {
+  const blogSupabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+
+  const adminSupabase = createClient(
+    process.env.ADMIN_SUPABASE_URL!,
+    process.env.ADMIN_SUPABASE_SERVICE_ROLE_KEY!
+  )
+
+  async function upsertBlogLead(email: string, name: string) {
+    const { data } = await blogSupabase
+      .from('lead_list')
+      .select('id, submission_count')
+      .eq('email', email)
+      .single()
+
+    if (data) {
+      await blogSupabase
+        .from('lead_list')
+        .update({ submission_count: data.submission_count + 1, last_submitted_at: new Date().toISOString(), name })
+        .eq('id', data.id)
+    } else {
+      await blogSupabase
+        .from('lead_list')
+        .insert({ name, email, source: 'agentbazar-blog' })
+    }
+  }
+
+  async function upsertAdminLead(email: string, name: string) {
+    const { data } = await adminSupabase
+      .from('lead_list')
+      .select('id, submission_count')
+      .eq('email', email)
+      .eq('client_id', AGENTBAZAR_CLIENT_ID)
+      .single()
+
+    if (data) {
+      await adminSupabase
+        .from('lead_list')
+        .update({ submission_count: data.submission_count + 1, last_submitted_at: new Date().toISOString(), name })
+        .eq('id', data.id)
+    } else {
+      await adminSupabase
+        .from('lead_list')
+        .insert({ name, email, client_id: AGENTBAZAR_CLIENT_ID, client_name: 'TRIPFORU HOLIDAYS PRIVATE LIMITED', source: 'agentbazar-blog' })
+    }
+  }
+
   try {
     const { name, email } = await req.json()
 
