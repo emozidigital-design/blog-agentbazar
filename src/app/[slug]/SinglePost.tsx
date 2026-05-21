@@ -54,7 +54,7 @@ export default function SinglePost({ slug }: { slug: string }) {
       .eq('slug', slug)
       .eq('status', 'published')
       .single()
-      .then(({ data, error: fetchError }) => {
+      .then(async ({ data, error: fetchError }) => {
         if (fetchError) {
           setError('Failed to load post. Please try again.')
           setLoading(false)
