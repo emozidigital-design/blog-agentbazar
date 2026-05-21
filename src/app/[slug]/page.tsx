@@ -16,8 +16,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!post) return { title: 'Post Not Found | AgentBazar Blog' }
 
-  const ogImages = post.cover_image
-    ? [{ url: post.cover_image, width: 1200, height: 630, alt: post.title }]
+  const optimizedImageUrl = post.cover_image
+    ? `https://blog.agentbazar.in/_next/image?url=${encodeURIComponent(post.cover_image)}&w=1200&q=80`
+    : null
+
+  const ogImages = optimizedImageUrl
+    ? [{ url: optimizedImageUrl, width: 1200, height: 630, alt: post.title }]
     : []
 
   return {
@@ -35,7 +39,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: 'summary_large_image',
       title: post.og_title || post.title,
       description: post.og_description || post.excerpt,
-      images: post.cover_image ? [post.cover_image] : [],
+      images: optimizedImageUrl ? [optimizedImageUrl] : [],
     },
     alternates: {
       canonical: post.canonical_url || `https://blog.agentbazar.in/${post.slug}`,
