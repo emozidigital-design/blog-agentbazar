@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import DOMPurify from 'isomorphic-dompurify'
 import { supabase, Post, formatDate, readTime } from '@/lib/supabase'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
@@ -74,6 +73,7 @@ export default function SinglePost({ slug }: { slug: string }) {
         // Remove 'Created with Emozi Technologies' text
         cleaned = cleaned.replace(/<p>[^<]*Created with[^<]*Emozi Technologies.*?<\/p>/gi, '')
         cleaned = cleaned.replace(/Created with.*Emozi Technologies/gi, '')
+        const { default: DOMPurify } = await import('isomorphic-dompurify')
         const sanitized = DOMPurify.sanitize(cleaned, {
           ALLOWED_TAGS: [
             'p', 'br', 'b', 'i', 'em', 'strong', 'u', 's', 'del', 'ins',
