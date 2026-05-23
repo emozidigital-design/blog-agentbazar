@@ -16,18 +16,51 @@ function buildToc(html: string): TocItem[] {
   if (typeof window === 'undefined') return []
   const div = document.createElement('div')
   div.innerHTML = html
-  const headings = div.querySelectorAll('h2, h3')
   const items: TocItem[] = []
-  headings.forEach((h, i) => {
-    const text = h.textContent?.trim() || ''
-    if (text) items.push({ id: `heading-${i}`, text, level: parseInt(h.tagName[1]) })
+  let count = 0
+  div.querySelectorAll('h2, h3, h4, p').forEach((el) => {
+    const tag = el.tagName.toLowerCase()
+    if (tag === 'h2' || tag === 'h3' || tag === 'h4') {
+      const text = el.textContent?.trim() || ''
+      if (text) {
+        const level = parseInt(tag[1])
+        items.push({ id: `heading-${count++}`, text, level })
+      }
+    } else if (tag === 'p') {
+      const children = Array.from(el.childNodes)
+      const onlyStrong = children.length === 1 && (el.firstElementChild?.tagName === 'STRONG' || el.firstElementChild?.tagName === 'B')
+      const text = el.textContent?.trim() || ''
+      if (onlyStrong && text && text.length < 120) {
+        items.push({ id: `heading-${count++}`, text, level: 2 })
+      }
+    }
   })
   return items
 }
 
 function injectHeadingIds(html: string): string {
+  if (typeof window === 'undefined') {
+    let count = 0
+    return html.replace(/<(h[234])(.*?)>/gi, (_match, tag, attrs) => `<${tag}${attrs} id="heading-${count++}">`)
+  }
+  // Use DOM to inject IDs in the same order buildToc uses
+  const div = document.createElement('div')
+  div.innerHTML = html
   let count = 0
-  return html.replace(/<(h[23])(.*?)>/gi, (_match, tag, attrs) => `<${tag}${attrs} id="heading-${count++}">`)
+  div.querySelectorAll('h2, h3, h4, p').forEach((el) => {
+    const tag = el.tagName.toLowerCase()
+    if (tag === 'h2' || tag === 'h3' || tag === 'h4') {
+      el.id = `heading-${count++}`
+    } else if (tag === 'p') {
+      const children = Array.from(el.childNodes)
+      const onlyStrong = children.length === 1 && (el.firstElementChild?.tagName === 'STRONG' || el.firstElementChild?.tagName === 'B')
+      const text = el.textContent?.trim() || ''
+      if (onlyStrong && text && text.length < 120) {
+        el.id = `heading-${count++}`
+      }
+    }
+  })
+  return div.innerHTML
 }
 
 export default function SinglePost({ slug }: { slug: string }) {
