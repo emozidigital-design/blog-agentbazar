@@ -334,14 +334,10 @@ h1, h2, h3, h4, h5, h6 {
   position: relative;
   background: #f4f6f9;
 }
-.post-card-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center top;
-  transition: transform 0.4s;
-}
-.post-card:hover .post-card-img img { transform: scale(1.04); }
+.post-card-img img,
+.post-card-img span { transition: transform 0.4s; }
+.post-card:hover .post-card-img img,
+.post-card:hover .post-card-img span { transform: scale(1.04); }
 .post-card-body {
   padding: 20px 22px 24px;
   display: flex;

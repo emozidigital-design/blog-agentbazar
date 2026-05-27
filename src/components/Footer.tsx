@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { CATEGORIES } from '@/lib/supabase'
 import { useState } from 'react'
 
@@ -59,7 +60,7 @@ export default function Footer() {
 
           {/* Brand info */}
           <div style={{ position: 'relative', zIndex: 1, flex: '1 1 0', minWidth: 0 }}>
-            <img src="/ab-logo.png" alt="AgentBazar" style={{ height: 36, width: 'auto', objectFit: 'contain', marginBottom: '14px' }} />
+            <Image src="/ab-logo.png" alt="AgentBazar" width={120} height={36} style={{ height: 36, width: 'auto', objectFit: 'contain', marginBottom: '14px' }} />
             <p style={{ lineHeight: '1.7', marginBottom: '16px', fontWeight: 500, fontSize: '13.5px' }}>
               Agent Bazar Blogs delivers the latest aviation news, visa updates, fare trends, and travel industry insights for travel agents across India.
             </p>
