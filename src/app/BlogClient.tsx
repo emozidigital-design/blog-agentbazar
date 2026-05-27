@@ -24,7 +24,7 @@ function BlogContent({ initialPosts, initialTotal }: BlogClientProps) {
   const [posts, setPosts] = useState<Post[]>(initialPosts)
   const [total, setTotal] = useState(initialTotal)
   const [page, setPage] = useState(1)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(initialPosts.length === 0)
   const [error, setError] = useState<string | null>(null)
   const [activeCategory, setActiveCategory] = useState(urlCat)
   const [searchQuery, setSearchQuery] = useState(urlSearch)
