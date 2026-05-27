@@ -21,7 +21,7 @@ export default function PostCard({ post }: { post: Post }) {
             <div className="card-meta">
               <span>{formatDate(post.published_date)}</span>
               <span>·</span>
-              <span>{readTime(post.content)} min</span>
+              <span>{post.read_time ?? readTime(post.content)} min</span>
             </div>
             <span className="card-read">Read →</span>
           </div>

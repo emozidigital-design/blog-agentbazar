@@ -20,7 +20,7 @@ export default function HeroPost({ post }: { post: Post }) {
           <div className="hero-post-meta">
             <span>{formatDate(post.published_date)}</span>
             <span>·</span>
-            <span>{readTime(post.content)} min read</span>
+            <span>{post.read_time ?? readTime(post.content)} min read</span>
           </div>
           <span className="hero-read-link">Read article →</span>
         </div>

@@ -35,7 +35,7 @@ function BlogContent({ initialPosts, initialTotal }: BlogClientProps) {
     try {
       let query = supabase
         .from('blog_posts')
-        .select('id, slug, title, excerpt, cover_image, category, published_date, content', { count: 'exact' })
+        .select('id, slug, title, excerpt, cover_image, category, published_date, read_time', { count: 'exact' })
         .eq('status', 'published')
         .order('published_date', { ascending: false })
 

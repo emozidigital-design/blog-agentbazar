@@ -24,6 +24,7 @@ export interface Post {
   canonical_url: string
   published_date: string
   source: string
+  read_time?: number
 }
 
 export const CATEGORIES = [

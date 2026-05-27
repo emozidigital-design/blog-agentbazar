@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default function SinglePostShell({ post, recentPosts }: Props) {
-  const mins = readTime(post.content)
+  const mins = post.read_time ?? readTime(post.content)
   const tags = Array.isArray(post.tags) ? post.tags : []
 
   return (
