@@ -1,14 +1,28 @@
 import type { Metadata } from 'next'
-import { supabase } from '@/lib/supabase'
-import SinglePost from './SinglePost'
+import { notFound } from 'next/navigation'
+import { getServerSupabase } from '@/lib/supabase-server'
+import { Post, formatDate, readTime } from '@/lib/supabase'
+import SinglePostShell from './SinglePostShell'
 
 interface Props {
   params: Promise<{ slug: string }>
 }
 
+export const revalidate = 300 // re-generate stale pages every 5 minutes
+
+export async function generateStaticParams() {
+  const { data } = await getServerSupabase()
+    .from('blog_posts')
+    .select('slug')
+    .eq('status', 'published')
+    .order('published_date', { ascending: false })
+    .limit(500)
+  return (data ?? []).map(({ slug }) => ({ slug }))
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const { data: post } = await supabase
+  const { data: post } = await getServerSupabase()
     .from('blog_posts')
     .select('title, excerpt, cover_image, seo_title, seo_description, og_title, og_description, canonical_url, slug')
     .eq('slug', slug)
@@ -49,5 +63,29 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function Page({ params }: Props) {
   const { slug } = await params
-  return <SinglePost slug={slug} />
+
+  const [{ data: post }, { data: recentData }] = await Promise.all([
+    getServerSupabase()
+      .from('blog_posts')
+      .select('*')
+      .eq('slug', slug)
+      .eq('status', 'published')
+      .single(),
+    getServerSupabase()
+      .from('blog_posts')
+      .select('title, slug, published_date, cover_image, category')
+      .eq('status', 'published')
+      .order('published_date', { ascending: false })
+      .neq('slug', slug)
+      .limit(3),
+  ])
+
+  if (!post) notFound()
+
+  return (
+    <SinglePostShell
+      post={post as Post}
+      recentPosts={(recentData ?? []) as Post[]}
+    />
+  )
 }
