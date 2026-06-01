@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, useCallback, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
-import { supabase, Post, CATEGORIES, formatDate, readTime } from '@/lib/supabase'
+import { supabase, PostSummary, CATEGORIES, formatDate } from '@/lib/supabase'
 import Header from '@/components/Header'
 import HeroPost from '@/components/HeroPost'
 import PostCard from '@/components/PostCard'
@@ -11,7 +11,7 @@ import EntryPopup from '@/components/EntryPopup'
 const POSTS_PER_PAGE = 9
 
 interface BlogClientProps {
-  initialPosts: Post[]
+  initialPosts: PostSummary[]
   initialTotal: number
 }
 
@@ -21,7 +21,7 @@ function BlogContent({ initialPosts, initialTotal }: BlogClientProps) {
   const urlCat = searchParams.get('category') || 'All'
   const urlSearch = searchParams.get('search') || ''
 
-  const [posts, setPosts] = useState<Post[]>(initialPosts)
+  const [posts, setPosts] = useState<PostSummary[]>(initialPosts)
   const [total, setTotal] = useState(initialTotal)
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(initialPosts.length === 0)
@@ -47,7 +47,7 @@ function BlogContent({ initialPosts, initialTotal }: BlogClientProps) {
 
       const { data, count, error } = await query
       if (error) throw error
-      setPosts((data as Post[]) || [])
+      setPosts(data ?? [])
       setTotal(count || 0)
     } catch (err) {
       console.error(err)

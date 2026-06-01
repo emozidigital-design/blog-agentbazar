@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { CATEGORIES } from '@/lib/supabase'
 
@@ -35,13 +36,13 @@ export default function Header({ activeCategory = 'All', onCategoryChange = () =
 
       <div className="header-inner">
         <Link href="/" className="header-logo" style={{ display: 'flex', alignItems: 'center' }}>
-          <img 
-            src="/new-logo.jpg" 
-            alt="AgentBazar" 
-            style={{ 
-              height: '60px',
-              width: 'auto'
-            }} 
+          <Image
+            src="/new-logo.jpg"
+            alt="AgentBazar"
+            height={60}
+            width={180}
+            style={{ width: 'auto', height: '60px' }}
+            priority
           />
         </Link>
         <form className="header-search" onSubmit={handleSearch}>

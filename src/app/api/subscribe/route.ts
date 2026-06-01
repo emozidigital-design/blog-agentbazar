@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-const AGENTBAZAR_CLIENT_ID = 'd5104fcd-defe-4e3d-a4cf-1893dba7b931'
+const AGENTBAZAR_CLIENT_ID = process.env.AGENTBAZAR_CLIENT_ID!
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 
 export async function POST(req: NextRequest) {
@@ -16,41 +16,49 @@ export async function POST(req: NextRequest) {
   )
 
   async function upsertBlogLead(email: string, name: string) {
-    const { data } = await blogSupabase
+    const { data, error } = await blogSupabase
       .from('lead_list')
       .select('id, submission_count')
       .eq('email', email)
       .single()
 
+    if (error && error.code !== 'PGRST116') throw error
+
     if (data) {
-      await blogSupabase
+      const { error: updateError } = await blogSupabase
         .from('lead_list')
         .update({ submission_count: data.submission_count + 1, last_submitted_at: new Date().toISOString(), name })
         .eq('id', data.id)
+      if (updateError) throw updateError
     } else {
-      await blogSupabase
+      const { error: insertError } = await blogSupabase
         .from('lead_list')
         .insert({ name, email, source: 'agentbazar-blog' })
+      if (insertError) throw insertError
     }
   }
 
   async function upsertAdminLead(email: string, name: string) {
-    const { data } = await adminSupabase
+    const { data, error } = await adminSupabase
       .from('lead_list')
       .select('id, submission_count')
       .eq('email', email)
       .eq('client_id', AGENTBAZAR_CLIENT_ID)
       .single()
 
+    if (error && error.code !== 'PGRST116') throw error
+
     if (data) {
-      await adminSupabase
+      const { error: updateError } = await adminSupabase
         .from('lead_list')
         .update({ submission_count: data.submission_count + 1, last_submitted_at: new Date().toISOString(), name })
         .eq('id', data.id)
+      if (updateError) throw updateError
     } else {
-      await adminSupabase
+      const { error: insertError } = await adminSupabase
         .from('lead_list')
-        .insert({ name, email, client_id: AGENTBAZAR_CLIENT_ID, client_name: 'TRIPFORU HOLIDAYS PRIVATE LIMITED', source: 'agentbazar-blog' })
+        .insert({ name, email, client_id: AGENTBAZAR_CLIENT_ID, client_name: process.env.AGENTBAZAR_CLIENT_NAME!, source: 'agentbazar-blog' })
+      if (insertError) throw insertError
     }
   }
 

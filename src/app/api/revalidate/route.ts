@@ -2,8 +2,8 @@ import { revalidatePath } from 'next/cache'
 import { NextResponse } from 'next/server'
 
 // POST /api/revalidate?secret=<REVALIDATE_SECRET>&slug=<slug>
-// Omit slug to revalidate the homepage only.
-// Pass slug=* to revalidate homepage + a specific post page.
+// Pass slug=<post-slug> to revalidate that post page + the homepage.
+// Omit slug (or pass slug=*) to revalidate the homepage only.
 export async function POST(request: Request) {
   const { searchParams } = new URL(request.url)
   const secret = searchParams.get('secret')

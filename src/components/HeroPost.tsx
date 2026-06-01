@@ -1,9 +1,9 @@
 'use client'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Post, formatDate, readTime } from '@/lib/supabase'
+import { PostSummary, formatDate } from '@/lib/supabase'
 
-export default function HeroPost({ post }: { post: Post }) {
+export default function HeroPost({ post }: { post: PostSummary }) {
   return (
     <Link href={`/${post.slug}`} style={{ textDecoration: 'none', display: 'block' }}>
       <article className="hero-post">
@@ -21,7 +21,7 @@ export default function HeroPost({ post }: { post: Post }) {
           <div className="hero-post-meta">
             <span>{formatDate(post.published_date)}</span>
             <span>·</span>
-            <span>{post.read_time ?? readTime(post.content)} min read</span>
+            <span>{post.read_time ?? 1} min read</span>
           </div>
           <span className="hero-read-link">Read article →</span>
         </div>

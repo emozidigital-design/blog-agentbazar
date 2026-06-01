@@ -11,7 +11,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: sans-serif;
+  font-family: 'Syne', sans-serif;
   font-weight: 700;
   line-height: 1.2;
   color: #0f1923;
@@ -149,7 +149,7 @@ h1, h2, h3, h4, h5, h6 {
   padding: 56px 0 40px;
 }
 .blog-hero h1 {
-  font-family: sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: clamp(2rem, 4vw, 3.2rem);
   font-weight: 800;
   color: #0f1923;
@@ -165,7 +165,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ── SECTION LABEL (FEATURED, LATEST ARTICLES) ── */
 .section-label {
-  font-family: sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -262,7 +262,7 @@ h1, h2, h3, h4, h5, h6 {
   width: fit-content;
 }
 .hero-post-title {
-  font-family: sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: clamp(1.4rem, 2.5vw, 2rem);
   font-weight: 800;
   color: #fff;
@@ -359,7 +359,7 @@ h1, h2, h3, h4, h5, h6 {
   width: fit-content;
 }
 .card-title {
-  font-family: sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: 16px;
   font-weight: 700;
   color: #0f1923;
@@ -468,7 +468,7 @@ h1, h2, h3, h4, h5, h6 {
   top: 100px;
 }
 .toc-title {
-  font-family: sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -621,7 +621,7 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 14px;
 }
 .post-title {
-  font-family: sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: clamp(1.7rem, 3.5vw, 2.6rem);
   font-weight: 800;
   color: #0f1923;
@@ -648,7 +648,7 @@ h1, h2, h3, h4, h5, h6 {
   color: #2a3545;
 }
 .article-body h2 {
-  font-family: sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: 1.5rem;
   font-weight: 700;
   color: #0f1923;
@@ -656,7 +656,7 @@ h1, h2, h3, h4, h5, h6 {
   padding-top: 8px;
 }
 .article-body h3 {
-  font-family: sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: 1.2rem;
   font-weight: 600;
   color: #0f1923;
@@ -685,7 +685,7 @@ h1, h2, h3, h4, h5, h6 {
   color: #fff;
   padding: 10px 14px;
   text-align: left;
-  font-family: sans-serif;
+  font-family: 'Syne', sans-serif;
 }
 .article-body td {
   padding: 10px 14px;
@@ -734,7 +734,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .footer-brand p { line-height: 1.7; max-width: 280px; }
 .footer-col h4 {
-  font-family: sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -772,7 +772,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .sidebar-card-title {
-  font-family: sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -1068,7 +1068,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .popup-title {
-  font-family: sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: clamp(1.6rem, 3.5vw, 2.1rem);
   font-weight: 800;
   color: #0f1923;

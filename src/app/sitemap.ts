@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next'
+import { getServerSupabase } from '@/lib/supabase-server'
 
 const BASE_URL = 'https://blog.agentbazar.in'
 
@@ -10,24 +11,14 @@ const homepage: MetadataRoute.Sitemap[0] = {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-  if (!supabaseUrl || !supabaseKey) {
-    return [homepage]
-  }
-
   try {
-    const { createClient } = await import('@supabase/supabase-js')
-    const client = createClient(supabaseUrl, supabaseKey)
-
-    const { data: posts } = await client
+    const { data: posts } = await getServerSupabase()
       .from('blog_posts')
       .select('slug, published_date')
       .eq('status', 'published')
       .order('published_date', { ascending: false })
 
-    const postUrls: MetadataRoute.Sitemap = (posts || []).map(post => ({
+    const postUrls: MetadataRoute.Sitemap = (posts ?? []).map(post => ({
       url: `${BASE_URL}/${post.slug}`,
       lastModified: new Date(post.published_date),
       changeFrequency: 'monthly',

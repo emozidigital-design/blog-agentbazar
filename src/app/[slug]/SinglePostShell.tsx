@@ -1,13 +1,13 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Post, formatDate, readTime } from '@/lib/supabase'
+import { Post, PostSummary, formatDate, readTime } from '@/lib/supabase'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import SinglePostClient from './SinglePostClient'
 
 interface Props {
   post: Post
-  recentPosts: Post[]
+  recentPosts: PostSummary[]
 }
 
 export default function SinglePostShell({ post, recentPosts }: Props) {

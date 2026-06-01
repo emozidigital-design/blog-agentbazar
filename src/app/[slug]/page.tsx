@@ -1,14 +1,14 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getServerSupabase } from '@/lib/supabase-server'
-import { Post, formatDate, readTime } from '@/lib/supabase'
+import { Post, PostSummary } from '@/lib/supabase'
 import SinglePostShell from './SinglePostShell'
 
 interface Props {
   params: Promise<{ slug: string }>
 }
 
-export const revalidate = 300 // re-generate stale pages every 5 minutes
+export const revalidate = 3600 // re-generate stale pages every hour
 
 export async function generateStaticParams() {
   const { data } = await getServerSupabase()
@@ -67,7 +67,7 @@ export default async function Page({ params }: Props) {
   const [{ data: post }, { data: recentData }] = await Promise.all([
     getServerSupabase()
       .from('blog_posts')
-      .select('*')
+      .select('id, slug, title, excerpt, cover_image, category, published_date, read_time, content, seo_title, seo_description, focus_keyword, og_title, og_description, tags, author, status, canonical_url, source')
       .eq('slug', slug)
       .eq('status', 'published')
       .single(),
@@ -85,7 +85,7 @@ export default async function Page({ params }: Props) {
   return (
     <SinglePostShell
       post={post as Post}
-      recentPosts={(recentData ?? []) as Post[]}
+      recentPosts={(recentData ?? []) as PostSummary[]}
     />
   )
 }

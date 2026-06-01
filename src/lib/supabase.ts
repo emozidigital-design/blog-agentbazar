@@ -5,26 +5,29 @@ const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
 
-export interface Post {
+export interface PostSummary {
   id: string
   slug: string
   title: string
-  content: string
   excerpt: string
+  cover_image: string
+  category: string
+  published_date: string
+  read_time?: number
+}
+
+export interface Post extends PostSummary {
+  content: string
   seo_title: string
   seo_description: string
   focus_keyword: string
-  cover_image: string
   og_title: string
   og_description: string
-  category: string
   tags: string[]
   author: string
   status: string
   canonical_url: string
-  published_date: string
   source: string
-  read_time?: number
 }
 
 export const CATEGORIES = [

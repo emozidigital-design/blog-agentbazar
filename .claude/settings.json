@@ -45,7 +45,11 @@
       "mcp__claude_ai_Vercel__get_runtime_logs",
       "Read(//c/Users/gaura/AppData/Roaming/com.vercel.cli/Data/**)",
       "Read(//c/agent bazar/**)",
-      "Read(//c/northeastforu/**)"
+      "Read(//c/northeastforu/**)",
+      "Bash(xargs wc -l)",
+      "Bash(Format-Table -AutoSize)",
+      "Bash(grep -r \"send\\\\|mail\\\\|resend\\\\|nodemailer\\\\|sgmail\" \"c:/agent bazar/Blog\" --include=\"*.ts\" --include=\"*.tsx\" --include=\"*.js\" --include=\"*.jsx\" ! -path \"*/node_modules/*\" ! -path \"*/.next/*\")",
+      "Bash(xargs ls -la)"
     ]
   }
 }

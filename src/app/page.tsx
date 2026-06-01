@@ -1,8 +1,8 @@
 import { getServerSupabase } from '@/lib/supabase-server'
-import { Post } from '@/lib/supabase'
+import { PostSummary } from '@/lib/supabase'
 import BlogPage from './BlogClient'
 
-export const revalidate = 300 // re-fetch homepage data at most every 5 minutes
+export const revalidate = 3600 // re-fetch homepage data at most every hour
 
 const POSTS_PER_PAGE = 9
 
@@ -16,7 +16,7 @@ export default async function Page() {
 
   return (
     <BlogPage
-      initialPosts={(data ?? []) as Post[]}
+      initialPosts={(data ?? []) as PostSummary[]}
       initialTotal={count ?? 0}
     />
   )
