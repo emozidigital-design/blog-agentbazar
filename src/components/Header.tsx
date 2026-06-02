@@ -63,7 +63,16 @@ export default function Header({ activeCategory = 'All', onCategoryChange = () =
       <div className="cat-strip">
         <div className="cat-strip-inner">
           {CATEGORIES.map(cat => (
-            <button key={cat} className={`cat-strip-btn${activeCategory === cat ? ' active' : ''}`} onClick={() => onCategoryChange(cat)}>
+            <button
+              key={cat}
+              className={`cat-strip-btn${activeCategory === cat ? ' active' : ''}`}
+              onClick={() => {
+                onCategoryChange(cat)
+                const params = new URLSearchParams()
+                if (cat !== 'All') params.set('category', cat)
+                router.push(`/?${params.toString()}`)
+              }}
+            >
               {cat}
             </button>
           ))}
