@@ -16,6 +16,11 @@ export interface PostSummary {
   read_time?: number
 }
 
+export interface FaqItem {
+  q: string
+  a: string
+}
+
 export interface Post extends PostSummary {
   content: string
   seo_title: string
@@ -28,6 +33,7 @@ export interface Post extends PostSummary {
   status: string
   canonical_url: string
   source: string
+  schema_faq?: FaqItem[]
 }
 
 export const CATEGORIES = [

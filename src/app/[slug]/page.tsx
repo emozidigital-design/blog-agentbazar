@@ -67,7 +67,7 @@ export default async function Page({ params }: Props) {
   const [{ data: post }, { data: recentData }] = await Promise.all([
     getServerSupabase()
       .from('blog_posts')
-      .select('id, slug, title, excerpt, cover_image, category, published_date, read_time, content, seo_title, seo_description, focus_keyword, og_title, og_description, tags, author, status, canonical_url, source')
+      .select('id, slug, title, excerpt, cover_image, category, published_date, read_time, content, seo_title, seo_description, focus_keyword, og_title, og_description, tags, author, status, canonical_url, source, schema_faq')
       .eq('slug', slug)
       .eq('status', 'published')
       .single(),
