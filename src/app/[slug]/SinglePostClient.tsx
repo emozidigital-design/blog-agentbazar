@@ -1,36 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Post, FaqItem } from '@/lib/supabase'
-
-function FaqSection({ items }: { items: FaqItem[] }) {
-  const [openIndex, setOpenIndex] = useState<number | null>(null)
-  if (!items || items.length === 0) return null
-  return (
-    <section className="faq-section">
-      <h2 className="faq-heading">Frequently Asked Questions</h2>
-      <div className="faq-list">
-        {items.map((item, i) => (
-          <div key={i} className={`faq-item${openIndex === i ? ' open' : ''}`}>
-            <button
-              className="faq-question"
-              onClick={() => setOpenIndex(openIndex === i ? null : i)}
-              aria-expanded={openIndex === i}
-            >
-              <span>{item.q}</span>
-              <svg className="faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 9l6 6 6-6" />
-              </svg>
-            </button>
-            {openIndex === i && (
-              <div className="faq-answer">{item.a}</div>
-            )}
-          </div>
-        ))}
-      </div>
-    </section>
-  )
-}
+import { Post } from '@/lib/supabase'
 
 interface TocItem {
   id: string
@@ -233,12 +204,10 @@ export default function SinglePostClient({ post, sidebarOnly = false }: Props) {
     )
   }
 
-  // Main column: sanitized article body + FAQ + share inline + stay connected block
+  // Main column: sanitized article body + share inline + stay connected block
   return (
     <>
       <div className="article-body" dangerouslySetInnerHTML={{ __html: processedContent }} />
-
-      <FaqSection items={post.schema_faq ?? []} />
 
       <div className="article-share-inline">
         <span className="share-text">Share this article:</span>
