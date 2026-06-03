@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Post, PostSummary, formatDate, readTime } from '@/lib/supabase'
@@ -16,7 +17,9 @@ export default function SinglePostShell({ post, recentPosts }: Props) {
 
   return (
     <>
-      <Header activeCategory={post.category || 'All'} />
+      <Suspense fallback={null}>
+        <Header />
+      </Suspense>
 
       <div className="single-layout">
         <article className="single-main">

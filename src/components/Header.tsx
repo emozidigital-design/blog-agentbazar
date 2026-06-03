@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import { CATEGORIES } from '@/lib/supabase'
 
 const MAX_SEARCH_LENGTH = 100
@@ -13,7 +13,7 @@ interface HeaderProps {
   initialQuery?: string
 }
 
-export default function Header({ activeCategory = 'All', onCategoryChange = () => {}, initialQuery = '' }: HeaderProps) {
+export default function Header({ activeCategory: propCategory = 'All', onCategoryChange = () => {}, initialQuery = '' }: HeaderProps) {
   const [query, setQuery] = useState(initialQuery)
   const [scrolled, setScrolled] = useState(false)
   useEffect(() => { setQuery(initialQuery) }, [initialQuery])
@@ -23,6 +23,14 @@ export default function Header({ activeCategory = 'All', onCategoryChange = () =
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
   const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+
+  // On the homepage, derive active category from URL so it updates immediately after navigation.
+  // On blog post pages (non-root paths), no category is active.
+  const activeCategory = pathname === '/'
+    ? (searchParams.get('category') || 'All')
+    : 'All'
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
