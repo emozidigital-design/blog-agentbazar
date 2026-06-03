@@ -11,7 +11,7 @@ export function getServerSupabase() {
       fetch: (url, options) =>
         fetch(url, {
           ...options,
-          next: { revalidate: 3600 }, // cache Supabase responses for 1 hour
+          next: { revalidate: 86400 }, // cache Supabase responses for 24 hours
         }),
     },
   })

@@ -8,7 +8,7 @@ interface Props {
   params: Promise<{ slug: string }>
 }
 
-export const revalidate = 3600 // re-generate stale pages every hour
+export const revalidate = 86400 // re-generate stale pages every 24 hours (manual revalidation via /api/revalidate on publish)
 
 export async function generateStaticParams() {
   const { data } = await getServerSupabase()
@@ -16,7 +16,7 @@ export async function generateStaticParams() {
     .select('slug')
     .eq('status', 'published')
     .order('published_date', { ascending: false })
-    .limit(500)
+    .limit(50) // pre-build only recent 50; older posts render on-demand via ISR fallback
   return (data ?? []).map(({ slug }) => ({ slug }))
 }
 

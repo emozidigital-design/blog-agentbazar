@@ -2,7 +2,7 @@ import { getServerSupabase } from '@/lib/supabase-server'
 import { PostSummary } from '@/lib/supabase'
 import BlogPage from './BlogClient'
 
-export const revalidate = 3600 // re-fetch homepage data at most every hour
+export const revalidate = 86400 // re-fetch homepage data every 24 hours (new posts trigger /api/revalidate on publish)
 
 const POSTS_PER_PAGE = 9
 
