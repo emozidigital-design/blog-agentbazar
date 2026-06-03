@@ -9,6 +9,7 @@ interface Props {
 }
 
 export const revalidate = 86400 // re-generate stale pages every 24 hours (manual revalidation via /api/revalidate on publish)
+export const dynamicParams = true // render on-demand for slugs not in generateStaticParams
 
 export async function generateStaticParams() {
   const { data } = await getServerSupabase()
