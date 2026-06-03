@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getServerSupabase } from '@/lib/supabase-server'
+import { getServerSupabase, getFreshSupabase } from '@/lib/supabase-server'
 import { Post, PostSummary } from '@/lib/supabase'
 import SinglePostShell from './SinglePostShell'
 
@@ -23,7 +23,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const { data: post } = await getServerSupabase()
+  const { data: post } = await getFreshSupabase()
     .from('blog_posts')
     .select('title, excerpt, cover_image, seo_title, seo_description, og_title, og_description, canonical_url, slug')
     .eq('slug', slug)
@@ -66,13 +66,13 @@ export default async function Page({ params }: Props) {
   const { slug } = await params
 
   const [{ data: post }, { data: recentData }] = await Promise.all([
-    getServerSupabase()
+    getFreshSupabase()
       .from('blog_posts')
       .select('id, slug, title, excerpt, cover_image, category, published_date, read_time, content, seo_title, seo_description, focus_keyword, og_title, og_description, tags, author, status, canonical_url, source, schema_faq')
       .eq('slug', slug)
       .eq('status', 'published')
       .single(),
-    getServerSupabase()
+    getFreshSupabase()
       .from('blog_posts')
       .select('title, slug, published_date, cover_image, category')
       .eq('status', 'published')
