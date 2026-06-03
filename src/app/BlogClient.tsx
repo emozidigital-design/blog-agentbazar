@@ -65,13 +65,9 @@ function BlogContent({ initialPosts, initialTotal }: BlogClientProps) {
     setPage(1)
   }, [urlCat, urlSearch])
 
-  const isInitialRender =
-    page === 1 && activeCategory === 'All' && !searchQuery && initialPosts.length > 0
-
   useEffect(() => {
-    if (isInitialRender) return // use server-fetched data on first render
     fetchPosts(activeCategory, searchQuery, page)
-  }, [activeCategory, searchQuery, page, fetchPosts, isInitialRender])
+  }, [activeCategory, searchQuery, page, fetchPosts])
 
   const handleCategoryChange = (cat: string) => {
     setActiveCategory(cat)
