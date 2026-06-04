@@ -92,7 +92,7 @@ export default function SinglePostShell({ post, recentPosts }: Props) {
           </div>
         </article>
 
-        <aside className="single-sidebar" style={{ display: 'flex', flexDirection: 'column', gap: '24px', height: '100%' }}>
+        <aside className="single-sidebar">
           {recentPosts.length > 0 && (
             <div style={{ background: '#f4f6f9', borderRadius: 16, padding: 24, border: '1.5px solid #e8ecf2' }}>
               <div style={{ fontFamily: 'sans-serif', fontSize: 14, fontWeight: 700, textTransform: 'uppercase', marginBottom: 16, letterSpacing: '0.06em', color: '#0f1923' }}>Recent Articles</div>

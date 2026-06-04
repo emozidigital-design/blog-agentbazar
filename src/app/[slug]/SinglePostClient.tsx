@@ -69,6 +69,7 @@ export default function SinglePostClient({ post, sidebarOnly = false }: Props) {
   const [copied, setCopied] = useState(false)
   const [processedContent, setProcessedContent] = useState('')
   const [isShareOpen, setIsShareOpen] = useState(false)
+  const [isTocOpen, setIsTocOpen] = useState(false)
 
   useEffect(() => {
     const rawContent = post.content || ''
@@ -126,15 +127,24 @@ export default function SinglePostClient({ post, sidebarOnly = false }: Props) {
     return (
       <>
         {toc.length > 0 && (
-          <div className="toc-box" style={{ position: 'static' }}>
-            <div className="toc-title">Table of Contents</div>
-            <ul className="toc-list">
-              {toc.map(item => (
-                <li key={item.id} style={{ paddingLeft: item.level === 3 ? 12 : 0 }}>
-                  <a href={`#${item.id}`}>{item.text}</a>
-                </li>
-              ))}
-            </ul>
+          <div className={`toc-box${isTocOpen ? ' open' : ''}`}>
+            <button
+              className="toc-toggle-handle"
+              onClick={() => setIsTocOpen(!isTocOpen)}
+              aria-label={isTocOpen ? "Close Table of Contents" : "Open Table of Contents"}
+            >
+              {isTocOpen ? '▶' : '◀'}
+            </button>
+            <div className="toc-inner">
+              <div className="toc-title">Table of Contents</div>
+              <ul className="toc-list">
+                {toc.map(item => (
+                  <li key={item.id} style={{ paddingLeft: item.level === 3 ? 12 : 0 }}>
+                    <a href={`#${item.id}`} onClick={() => setIsTocOpen(false)}>{item.text}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         )}
 
@@ -237,7 +247,7 @@ export default function SinglePostClient({ post, sidebarOnly = false }: Props) {
 
       <div className="stay-connected-main">
         <div className="sidebar-card-title">
-          <span style={{ fontSize: 24 }}>🌍</span> Stay Connected with the Travel Community
+          Stay Connected with the Travel Community
         </div>
         <p className="about-text" style={{ fontSize: 16, maxWidth: 500 }}>
           Follow us on Facebook, X (Twitter), Instagram, and YouTube for the latest travel updates and insights!

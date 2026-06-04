@@ -38,18 +38,7 @@ export default function Footer() {
       <div className="footer-inner">
 
         {/* ── Cols 1+2: Brand + Form (single card spanning 2 columns) ── */}
-        <div style={{
-          gridColumn: 'span 2',
-          position: 'relative',
-          backgroundColor: 'white',
-          borderRadius: '12px',
-          color: '#1a2332',
-          overflow: 'hidden',
-          padding: '28px 32px',
-          display: 'flex',
-          gap: '32px',
-          alignItems: 'flex-start',
-        }}>
+        <div className="footer-newsletter-card">
           {/* Background image overlay */}
           <div style={{
             position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
@@ -59,7 +48,7 @@ export default function Footer() {
           }} />
 
           {/* Brand info */}
-          <div style={{ position: 'relative', zIndex: 1, flex: '1 1 0', minWidth: 0 }}>
+          <div className="footer-newsletter-brand">
             <Image src="/ab-logo.png" alt="AgentBazar" width={120} height={36} style={{ height: 36, width: 'auto', objectFit: 'contain', marginBottom: '14px' }} />
             <p style={{ lineHeight: '1.7', marginBottom: '16px', fontWeight: 500, fontSize: '13.5px' }}>
               Agent Bazar Blogs delivers the latest aviation news, visa updates, fare trends, and travel industry insights for travel agents across India.
@@ -78,10 +67,10 @@ export default function Footer() {
           </div>
 
           {/* Divider */}
-          <div style={{ position: 'relative', zIndex: 1, width: '1px', alignSelf: 'stretch', background: 'rgba(26,79,160,0.1)', flexShrink: 0 }} />
+          <div className="footer-newsletter-divider" />
 
           {/* Subscribe form */}
-          <div style={{ position: 'relative', zIndex: 1, flex: '1 1 0', minWidth: 0 }}>
+          <div className="footer-newsletter-form">
             <h5 style={{ fontSize: '14px', fontWeight: 700, color: '#1A4FA0', marginBottom: '16px' }}>
               Get daily travel &amp; flights updates
             </h5>
