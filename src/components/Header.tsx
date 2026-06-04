@@ -49,7 +49,7 @@ export default function Header({ activeCategory: propCategory = 'All', onCategor
             alt="AgentBazar"
             height={60}
             width={180}
-            style={{ width: 'auto', height: '60px' }}
+            className="logo-img"
             priority
           />
         </Link>
