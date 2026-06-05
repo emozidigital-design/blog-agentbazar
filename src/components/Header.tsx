@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
@@ -16,11 +16,28 @@ interface HeaderProps {
 export default function Header({ activeCategory: propCategory = 'All', onCategoryChange = () => {}, initialQuery = '' }: HeaderProps) {
   const [query, setQuery] = useState(initialQuery)
   const [scrolled, setScrolled] = useState(false)
+  const [hidden, setHidden] = useState(false)
+  const lastScrollY = useRef(0)
+
   useEffect(() => { setQuery(initialQuery) }, [initialQuery])
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60)
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      setScrolled(currentScrollY > 60)
+      
+      if (currentScrollY > 100) {
+        if (currentScrollY > lastScrollY.current) {
+          setHidden(true)
+        } else {
+          setHidden(false)
+        }
+      } else {
+        setHidden(false)
+      }
+      lastScrollY.current = currentScrollY
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
   const router = useRouter()
   const pathname = usePathname()
@@ -40,7 +57,7 @@ export default function Header({ activeCategory: propCategory = 'All', onCategor
   }
 
   return (
-    <header className={`site-header${scrolled ? ' scrolled' : ''}`}>
+    <header className={`site-header${scrolled ? ' scrolled' : ''}${hidden ? ' header-hidden' : ''}`}>
 
       <div className="header-inner">
         <Link href="/" className="header-logo" style={{ display: 'flex', alignItems: 'center' }}>

@@ -36,6 +36,9 @@ h1, h2, h3, h4, h5, h6 {
   backdrop-filter: blur(16px);
   overflow: hidden;
 }
+.site-header.header-hidden {
+  transform: translateY(-100%);
+}
 
 .header-inner {
   max-width: 1280px;
@@ -56,18 +59,16 @@ h1, h2, h3, h4, h5, h6 {
   max-width: 100%;
 }
 
-.logo-img {
-  height: 52px;
-  width: auto;
+.logo-img,
+.header-logo img {
+  height: 52px !important;
+  width: auto !important;
+  object-fit: contain;
   transition: height 0.35s ease;
 }
-.site-header.scrolled .logo-img {
-  height: 40px;
-}
-
-.header-logo img {
-  height: 100%;
-  width: auto;
+.site-header.scrolled .logo-img,
+.site-header.scrolled .header-logo img {
+  height: 40px !important;
 }
 
 .header-search {
