@@ -1,5 +1,8 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import GoogleTagManager from '@/components/GoogleTagManager'
+
+const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID
 
 export const metadata: Metadata = {
   title: 'AgentBazar Blog – Travel Industry News & Insights',
@@ -16,5 +19,12 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return <html lang="en"><body>{children}</body></html>
+  return (
+    <html lang="en">
+      <body>
+        {GTM_ID && <GoogleTagManager gtmId={GTM_ID} />}
+        {children}
+      </body>
+    </html>
+  )
 }
