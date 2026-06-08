@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+const { withSentryConfig } = require('@sentry/nextjs')
+
 const nextConfig = {
   images: {
     remotePatterns: [
@@ -7,4 +9,12 @@ const nextConfig = {
     ],
   },
 }
-module.exports = nextConfig
+
+module.exports = withSentryConfig(nextConfig, {
+  org: 'agentbazar',
+  project: 'agentbazar-blogs',
+  silent: !process.env.CI,
+  widenClientFileUpload: true,
+  hideSourceMaps: true,
+  disableLogger: true,
+})
