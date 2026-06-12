@@ -114,7 +114,7 @@ export default function SinglePostShell({ post, recentPosts }: Props) {
           )}
 
           <div className="sidebar-card">
-            <Image src="/new-logo.jpg" alt="AgentBazar" width={160} height={60} className="about-logo" style={{ height: 'auto' }} />
+            <img src="/new-logo.jpg" alt="AgentBazar" width={160} height={60} className="about-logo" style={{ height: 'auto' }} />
             <div className="sidebar-card-title">About the Agent Bazar Blog</div>
             <p className="about-text">
               The Agent Bazar Blog is your trusted source for industry news, airfare trends, visa updates, and insights tailored for B2B travel agents, consolidators, corporate travel planners, and tour operators.
