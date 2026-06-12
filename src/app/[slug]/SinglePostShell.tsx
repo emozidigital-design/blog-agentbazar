@@ -1,6 +1,5 @@
 import { Suspense } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { Post, PostSummary, formatDate, readTime } from '@/lib/supabase'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
@@ -63,8 +62,8 @@ export default function SinglePostShell({ post, recentPosts }: Props) {
           </header>
 
           {post.cover_image && (
-            <div className="post-cover" style={{ position: 'relative', aspectRatio: '16/9' }}>
-              <Image src={post.cover_image} alt={post.title} fill sizes="(max-width:768px) 100vw, (max-width:1200px) 75vw, 800px" style={{ objectFit: 'cover' }} priority />
+            <div className="post-cover" style={{ aspectRatio: '16/9', overflow: 'hidden' }}>
+              <img src={post.cover_image} alt={post.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
             </div>
           )}
 
@@ -100,8 +99,8 @@ export default function SinglePostShell({ post, recentPosts }: Props) {
                 {recentPosts.map(rp => (
                   <Link key={rp.slug} href={`/${rp.slug}`} style={{ textDecoration: 'none', color: 'inherit', display: 'flex', gap: 12, alignItems: 'center' }}>
                     {rp.cover_image && (
-                      <div style={{ position: 'relative', width: 64, height: 64, borderRadius: 8, overflow: 'hidden', flexShrink: 0 }}>
-                        <Image src={rp.cover_image} alt={rp.title} fill sizes="64px" style={{ objectFit: 'cover' }} />
+                      <div style={{ width: 64, height: 64, borderRadius: 8, overflow: 'hidden', flexShrink: 0 }}>
+                        <img src={rp.cover_image} alt={rp.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                       </div>
                     )}
                     <div style={{ flex: 1 }}>

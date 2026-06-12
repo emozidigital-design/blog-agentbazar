@@ -1,6 +1,5 @@
 'use client'
 import Link from 'next/link'
-import Image from 'next/image'
 import { PostSummary, formatDate } from '@/lib/supabase'
 
 export default function HeroPost({ post }: { post: PostSummary }) {
@@ -9,7 +8,12 @@ export default function HeroPost({ post }: { post: PostSummary }) {
       <article className="hero-post">
         <div className="hero-post-img">
           {post.cover_image ? (
-            <Image src={post.cover_image} alt={post.title} fill sizes="(max-width:1024px) 100vw, 50vw" style={{ objectFit: 'cover' }} priority />
+            <img
+              src={post.cover_image}
+              alt={post.title}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+              onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
+            />
           ) : (
             <div style={{ width: '100%', height: '100%', minHeight: '420px', background: 'linear-gradient(135deg, #1A4FA0 0%, #0d1b2e 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '4rem' }}>✈️</div>
           )}
