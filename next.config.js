@@ -8,6 +8,9 @@ const nextConfig = {
       { protocol: 'http', hostname: '**' },
     ],
   },
+  experimental: {
+    serverComponentsExternalPackages: ['jsdom', 'isomorphic-dompurify'],
+  },
 }
 
 module.exports = withSentryConfig(nextConfig, {

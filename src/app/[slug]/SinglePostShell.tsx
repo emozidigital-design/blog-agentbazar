@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
 import Link from 'next/link'
 import { Post, PostSummary, formatDate, readTime } from '@/lib/supabase'
+import { processPostContent } from '@/lib/post-content'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import SinglePostClient from './SinglePostClient'
@@ -13,6 +14,7 @@ interface Props {
 export default function SinglePostShell({ post, recentPosts }: Props) {
   const mins = post.read_time ?? readTime(post.content)
   const tags = Array.isArray(post.tags) ? post.tags : []
+  const { html: processedContent, toc } = processPostContent(post.content)
 
   return (
     <>
@@ -67,8 +69,8 @@ export default function SinglePostShell({ post, recentPosts }: Props) {
             </div>
           )}
 
-          {/* Client component handles: content sanitization, TOC, share buttons, FABs */}
-          <SinglePostClient post={post} />
+          {/* Client component handles: TOC toggling, share buttons, FABs. Body HTML is pre-sanitized server-side. */}
+          <SinglePostClient post={post} processedContent={processedContent} />
 
           {tags.length > 0 && (
             <div className="post-tags">
@@ -127,8 +129,8 @@ export default function SinglePostShell({ post, recentPosts }: Props) {
             </Link>
           </div>
 
-          {/* TOC and FABs are rendered client-side since they need DOM/interactivity */}
-          <SinglePostClient post={post} sidebarOnly />
+          {/* TOC list is pre-built server-side; toggling/FABs remain client-side interactivity */}
+          <SinglePostClient post={post} sidebarOnly toc={toc} />
         </aside>
       </div>
 

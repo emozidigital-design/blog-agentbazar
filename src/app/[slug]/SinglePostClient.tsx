@@ -1,106 +1,20 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import { Post } from '@/lib/supabase'
-
-interface TocItem {
-  id: string
-  text: string
-  level: number
-}
-
-function buildToc(html: string): TocItem[] {
-  if (typeof window === 'undefined') return []
-  const div = document.createElement('div')
-  div.innerHTML = html
-  const items: TocItem[] = []
-  let count = 0
-  div.querySelectorAll('h2, h3, h4, p').forEach((el) => {
-    const tag = el.tagName.toLowerCase()
-    if (tag === 'h2' || tag === 'h3' || tag === 'h4') {
-      const text = el.textContent?.trim() || ''
-      if (text) {
-        const level = parseInt(tag[1])
-        items.push({ id: `heading-${count++}`, text, level })
-      }
-    } else if (tag === 'p') {
-      const children = Array.from(el.childNodes)
-      const onlyStrong = children.length === 1 && (el.firstElementChild?.tagName === 'STRONG' || el.firstElementChild?.tagName === 'B')
-      const text = el.textContent?.trim() || ''
-      if (onlyStrong && text && text.length < 120) {
-        items.push({ id: `heading-${count++}`, text, level: 2 })
-      }
-    }
-  })
-  return items
-}
-
-function injectHeadingIds(html: string): string {
-  if (typeof window === 'undefined') {
-    let count = 0
-    return html.replace(/<(h[234])(.*?)>/gi, (_match, tag, attrs) => `<${tag}${attrs} id="heading-${count++}">`)
-  }
-  const div = document.createElement('div')
-  div.innerHTML = html
-  let count = 0
-  div.querySelectorAll('h2, h3, h4, p').forEach((el) => {
-    const tag = el.tagName.toLowerCase()
-    if (tag === 'h2' || tag === 'h3' || tag === 'h4') {
-      el.id = `heading-${count++}`
-    } else if (tag === 'p') {
-      const children = Array.from(el.childNodes)
-      const onlyStrong = children.length === 1 && (el.firstElementChild?.tagName === 'STRONG' || el.firstElementChild?.tagName === 'B')
-      const text = el.textContent?.trim() || ''
-      if (onlyStrong && text && text.length < 120) {
-        el.id = `heading-${count++}`
-      }
-    }
-  })
-  return div.innerHTML
-}
+import { TocItem } from '@/lib/post-content'
 
 interface Props {
   post: Post
   sidebarOnly?: boolean
+  processedContent?: string
+  toc?: TocItem[]
 }
 
-export default function SinglePostClient({ post, sidebarOnly = false }: Props) {
-  const [toc, setToc] = useState<TocItem[]>([])
+export default function SinglePostClient({ post, sidebarOnly = false, processedContent = '', toc = [] }: Props) {
   const [copied, setCopied] = useState(false)
-  const [processedContent, setProcessedContent] = useState('')
   const [isShareOpen, setIsShareOpen] = useState(false)
   const [isTocOpen, setIsTocOpen] = useState(false)
-
-  useEffect(() => {
-    const rawContent = post.content || ''
-    const withIds = injectHeadingIds(rawContent)
-    let cleaned = withIds.replace(/<li>\s*<\/li>/gi, '')
-    cleaned = cleaned.replace(/<p>[^<]*Created with[^<]*Emozi Technologies.*?<\/p>/gi, '')
-    cleaned = cleaned.replace(/Created with.*Emozi Technologies/gi, '')
-
-    import('isomorphic-dompurify').then(({ default: DOMPurify }) => {
-      const sanitized = DOMPurify.sanitize(cleaned, {
-        ALLOWED_TAGS: [
-          'p', 'br', 'b', 'i', 'em', 'strong', 'u', 's', 'del', 'ins',
-          'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-          'ul', 'ol', 'li', 'dl', 'dt', 'dd',
-          'blockquote', 'pre', 'code',
-          'a', 'img',
-          'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td', 'caption', 'colgroup', 'col',
-          'div', 'span', 'section', 'article', 'aside', 'header', 'footer', 'main',
-          'figure', 'figcaption', 'hr', 'sup', 'sub', 'mark',
-        ],
-        ALLOWED_ATTR: [
-          'href', 'src', 'alt', 'title', 'class', 'id',
-          'target', 'rel', 'width', 'height',
-          'colspan', 'rowspan', 'scope', 'headers',
-        ],
-        ALLOW_DATA_ATTR: false,
-      })
-      setProcessedContent(sanitized)
-      setToc(buildToc(withIds))
-    })
-  }, [post.content])
 
   const handleCopy = () => {
     navigator.clipboard.writeText(window.location.href)
